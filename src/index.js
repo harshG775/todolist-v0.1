@@ -1,58 +1,23 @@
 "use strict";
-const listData = [
-    {
-        title: "name of the title",
-        list: "I would like to know, whats the right structure for a list of objects in JSON. We are using to convert the POJO's to JSON.",
-    },
-    {
-        title: "name of the title",
-        list: "I would like to know, whats the right structure for a list of objects in JSON. We are using to convert the POJO's to JSON.",
-    },
-];
+const $ = (e, all) =>all ? document.querySelectorAll(e) : document.querySelector(e);
 
-function index(element) {
-    const Root = document.getElementById("root");
-    Root.innerHTML=element.trim();
-    return Root.content.firstElementChild
+function setState(selector,callback){
+    const targetElement = $(selector)
+    let innerHtml = callback().toString()
+    function updateTargetElement(newHtml) {
+        targetElement.innerHTML=""
+        targetElement.innerHTML=newHtml
+    }
+    updateTargetElement(innerHtml)
 }
-
-index(App())
-function App() {
-  return (`
-    ${FormHeader()}
-    ${ListContainer()}
-  `)
-}
+///////////////////////////
 
 
 
-function FormHeader() {
-    return `
-    <header>
-        <form action="" id="form-input">
-            <input type="text" placeholder="title" required />
-            <input type="text" placeholder="list" required />
-            <button type="submit">add</button>
-        </form>
-    </header>
-`;
-}
-
-function ListContainer() {
-    return `
-    <main>
-        <ul id="list-container">
-            ${listData.map(d=>(
-                ListItem(d)
-            ))}
-        </ul>
-    </main>
-    `;
-}
 function ListItem(prop) {
-    const { title, list } = prop;
+    const { title, list,id } = prop;
     return `
-    <li>
+    <li id="${id}">
         <h4>${title}</h4>
         <p>${list}</p>
         <button type="button">Delete</button>
@@ -61,85 +26,36 @@ function ListItem(prop) {
   `;
 }
 
+let state = [
+    { title: "Task 1", list: "Do something",id:0},
+    { title: "Task 2", list: "Do another thing",id:1}
+];
 
+function ListContainer() {
+    return `
+        ${state.map(e=>(
+            ListItem(e)
+        )).join("")}
+    `;
+}
+setState("#list-container",()=>ListContainer())
+// initial render
 
-
-
-
-
-// const listData = [
-//     {
-//         title: "name of the title",
-//         list: "I would like to know, whats the right structure for a list of objects in JSON. We are using to convert the POJO's to JSON.",
-//     },
-//     {
-//         title: "name of the title",
-//         list: "I would like to know, whats the right structure for a list of objects in JSON. We are using to convert the POJO's to JSON.",
-//     },
-// ];
-
-// function index() {
-//     const Root = document.getElementById("root");
-//     Root.innerHTML = App()
-// }
-// index()
-
-// function App() {
+const addListItem = (e)=>{
+    e.preventDefault()
+    const newList={
+        title:e.target[0].value,
+        list:e.target[1].value,
+        id:state.length
+    }
+    state=[...state,newList]
+    setState("#list-container",()=>ListContainer())
+}
+// const DeleteListItem= async () => {
     
-//     return `
-//     ${FormHeader(listData)}
-//     ${ListContainer(listData)}
-//     `;
-// }
-
-// function FormHeader() {
-//     return `
-//     <header>
-//         <form action="" id="form-input">
-//             <input type="text" placeholder="title" required />
-//             <input type="text" placeholder="list" required />
-//             <button type="submit">add</button>
-//         </form>
-//     </header>
-// `;
-// }
-
-// function ListContainer(listData) {
-//     return `
-//     <main>
-//         <ul id="list-container">
-//             ${listData.map(d=>(
-//                 ListItem(d)
-//             ))}
-//         </ul>
-//     </main>
-//     `;
-// }
-
-// function ListItem(prop) {
-//     const { title, list } = prop;
-//     return `
-//     <li>
-//         <h4>${title}</h4>
-//         <p>${list}</p>
-//         <button type="button">Delete</button>
-//         <button type="button">edit</button>
-//     </li>
-//   `;
-// }
-
-// function appendList(e) {
-//         e.preventDefault()
-//         const newList ={
-//             title: formInput[0].value,
-//             list: formInput[1].value
-//         }
-    
-//         console.log(newList)
+//     setState("#list-container",()=>ListContainer())
 // }
 
 
-// const formInput = document.getElementById("form-input")
 
-// formInput.addEventListener("submit",appendList)
-
+$("form").addEventListener("submit",addListItem)
