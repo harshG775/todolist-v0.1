@@ -19,7 +19,7 @@ function app() {
         Render()
     })
     function Render() {
-        const ul = $("#list-container")
+        const ul = $("#count")
         ul.innerHTML = count
     }
 
