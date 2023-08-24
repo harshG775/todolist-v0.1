@@ -1,14 +1,7 @@
 "use strict";
-const $ = (el, all) =>all ? document.querySelectorAll(el) : document.querySelector(el);
 
-function useState(initialState){
-    var currentState = initialState
-    function setState(callback) {
-        currentState = callback(currentState)
-    }
-    return [currentState,setState]
-}
-
+import useState from "./modules/useState";
+import $ from "./modules/querySelector";
 
 function app() {
     const btn = $(".btn");
@@ -19,8 +12,8 @@ function app() {
         Render()
     })
     function Render() {
-        const ul = $("#count")
-        ul.innerHTML = count
+        const div = $("#count")
+        div.innerHTML = count
     }
 
     Render()
